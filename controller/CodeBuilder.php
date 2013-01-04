@@ -27,6 +27,32 @@ class CodeBuilder extends spController{
                 $this -> tpl_tables = $model ->findSql('SHOW TABLES;');
                 $this ->display('codeBuilder/genModel.html');
         }
+	
+	public function genModelAction(){
+		$actionType = $this->spArgs('genAction', 'preview');
+		$modelName = $this->spArgs('modelName');
+		$modelTable = $this->spArgs('modelTable');
+		$tableColInfo = spClass('spModel') -> findSql('show columns from '.$modelTable.';');
+		$tablePk = $this -> _findPK($tableColInfo);
+		$genCode = <<<EOT
+<?php
+class {$modelName} extends spModel{
+	public \$table = '{$modelTable}';
+	public \$pk = '{$tablePk}';
+		
+	public function getAttributes(){
+		return array(
+			{$this->_getAttributes($tableColInfo)});
+	}
+}
+EOT;
+		if($actionType == 'preview'){
+			echo $genCode;
+		}
+		if($actionType == 'gen'){
+			
+		}
+	}
         
         /**
          * Login page
@@ -53,5 +79,21 @@ class CodeBuilder extends spController{
                 unset($_SESSION['codeBuilder_admin']);
                 $this->jump (spUrl ('CodeBuilder','login'));
         }
+	
+	private function _findPK($tableColInfo){
+		foreach($tableColInfo as $col){
+			if($col['Key'] == 'PRI')
+				return $col['Field'];
+		}
+		return $tableColInfo[0]['Field'];
+	}
+	
+	private function _getAttributes($tableColInfo){
+		$str = '';
+		foreach($tableColInfo as $col){
+			$str .= '\''.$col['Field'].'\''.'=>'.'\''.$col['Field'].'\','."\n\t\t\t";
+		}
+		return $str;
+	}
 }
 ?>
