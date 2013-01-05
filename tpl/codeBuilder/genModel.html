@@ -37,7 +37,7 @@
                                                 <li><a href="#">Introduce</a></li>
                                                 <li><a href="#">Controller</a></li>
                                                 <li><a href="#">CURD</a></li>
-                                                <li class="active"><a href="#">Model</a></li>
+                                                <li class="active"><a href="<{spUrl c=CodeBuilder a=genModel}>">Model</a></li>
                                         </ul>
                                         <!--Sidebar content-->
                                 </div>
@@ -46,7 +46,7 @@
                                                 <div class="control-group">
                                                         <label class="control-label" for="inputEmail">表前缀：</label>
                                                         <div class="controls">
-                                                                <input name="modelTablePrefix" type="text" value="<{$tpl_prefix}>" />
+                                                                <input name="modelTablePrefix" type="text" value="<{$tpl_prefix}>" readonly="true" />
                                                         </div>
                                                 </div>
 
@@ -54,6 +54,7 @@
                                                         <label class="control-label" for="inputEmail">请选择数据表：</label>
                                                         <div class="controls">
                                                                 <select name="modelTable">
+									<option value="-1">请选择表</option>
                                                                         <{foreach $tpl_tables item=table}>
                                                                         <{assign var="tmp" value=$table|array_pop}>
                                                                         <option value="<{$tmp}>"><{$tmp}></option>
@@ -81,8 +82,33 @@
                                         <!--Body content-->
 
                                         <!-- Preview -->
-
-
+					<{if $tpl_preview == true}>
+					<div class="row">
+						<div class="span12">
+							<p class="text-success">将在以下位置生成代码：<{$tpl_codePath}></p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="span12">
+							<pre>
+<{$tpl_codePreview|htmlspecialchars}>
+							</pre>
+						</div>
+					</div>
+					<{/if}>
+					
+					<!-- Gen -->
+					<{if $tpl_gen == true}>
+					<div class="row">
+						<div class="span12">
+							<{if $tpl_success > 0}>
+							<p class="text-success">成功在以下位置生成代码：<{$tpl_codePath}></p>
+							<{else}>
+							<p class="text-error">以下位置生成代码失败：<{$tpl_codePath}> 请检查是否存在model文件夹或model文件夹是否有写入权限。</p>
+							<{/if}>
+						</div>
+					</div>
+					<{/if}>
                                 </div>
                         </div>
                 </div>
@@ -125,5 +151,15 @@
                                 }
                         })(jQuery);
                 </script>
+		
+		<{if $tpl_preview == true || $tpl_gen == true}>
+		<script>
+			(function($){
+				$('[name="modelTablePrefix"]').val('<{$tpl_modelTablePrefix}>');
+				$('[name="modelName"]').val('<{$tpl_modelName}>');
+				$('[name="modelTable"]').val('<{$tpl_modelTable}>');
+			})(jQuery)
+		</script>
+		<{/if}>
         </body>
 </html>
