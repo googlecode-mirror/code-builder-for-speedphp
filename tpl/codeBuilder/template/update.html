@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>CURD</title>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        </head>
+	<body>
+		<script src="bootstrap/js/jquery.min.js"></script>
+                <script src="bootstrap/js/bootstrap.js"></script>
+		<{include file='layouts/headNav.html'}>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<{include file='layouts/leftNav.html'}>
+					<!--Sidebar content-->
+				</div>
+				<div class="span10">
+					<!--Body content-->
+					<ul class="nav nav-tabs">
+						<li><a href="<{spUrl c=$_controller a=index}>">数据列表</a></li>
+						<li><a href="<{spUrl c=$_controller a=create}>">新增数据</a></li>
+						<li class="active"><a href="#">编辑数据详细</a></li>
+					</ul>
+					<form method="post" action="<{spUrl c=$_controller a=update id=$tpl_data[$_pk]}>">
+						<fieldset>
+							<legend>编辑记录数据</legend>
+							<{foreach from=$_attributes key=key item=attribute}>
+							<label><{$attribute}></label>
+							<input name="<{$_controller}>[<{$key}>]" type="text" placeholder="请输入<{$attribute}>" value="<{$tpl_data[$key]}>">
+							<{/foreach}>
+							<label></label>
+							<button type="submit" class="btn btn-primary">提交更改</button>
+							<button type="reset" class="btn">清除重填</button>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

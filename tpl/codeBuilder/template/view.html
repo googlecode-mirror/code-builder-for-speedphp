@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>CURD</title>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        </head>
+	<body>
+		<script src="bootstrap/js/jquery.min.js"></script>
+                <script src="bootstrap/js/bootstrap.js"></script>
+		<{include file='layouts/headNav.html'}>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<{include file='layouts/leftNav.html'}>
+					<!--Sidebar content-->
+				</div>
+				<div class="span10">
+					<!--Body content-->
+					<ul class="nav nav-tabs">
+						<li><a href="<{spUrl c=$_controller a=index}>">数据列表</a></li>
+						<li><a href="<{spUrl c=$_controller a=create}>">新增数据</a></li>
+						<li class="active"><a href="#">查看数据详细</a></li>
+					</ul>
+					<{if $tpl_data == ''}>
+					<p class="text-error">你要查看的数据不存在。</p>
+					<{else}>
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th width="100px">键</th>
+								<th>值</th>
+							</tr>
+						</thead>
+						<tbody>
+							<{foreach from=$_attributes key=key item=attribute}>
+							<tr>
+								<td><{$attribute}></td>
+								<td><{$tpl_data[$key]}></td>
+							</tr>
+							<{/foreach}>
+						</tbody>
+					</table>
+					<p>
+						<button class="btn btn-primary editButton" type="button">编辑该记录</button>
+						<button class="btn deleteConfirm" type="button">删除该记录</button>
+					</p>
+					<script>
+						(function($){
+							$('.deleteConfirm').click(function(){
+								if(confirm('您确认删除该条记录吗？该操作不可逆。'))
+									window.location = '<{spUrl c=$_controller a=delete id=$tpl_data[$_pk] redirect="javascript:window.close()"}>';
+							});
+							$('.editButton').click(function(){
+								window.location = '<{spUrl c=$_controller a=update id=$tpl_data[$_pk]}>';
+							});
+						})(jQuery)
+					</script>
+					<{/if}>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

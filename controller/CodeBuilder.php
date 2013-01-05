@@ -93,7 +93,7 @@ EOT;
 		$tablePk = $this -> _findPK($tableColInfo);
 		$genCode = <<<EOT
 <?php
-class {$modelName} extends spModel{
+class M{$modelName} extends spModel{
 	public \$table = '{$modelTable}';
 	public \$pk = '{$tablePk}';
 		
@@ -105,7 +105,7 @@ class {$modelName} extends spModel{
 EOT;
 		if($actionType == 'preview'){
 			$this -> tpl_preview = true;
-			$this -> tpl_codePath = $GLOBALS['G_SP']['model_path'].'/'.$modelName.'.php';
+			$this -> tpl_codePath = $GLOBALS['G_SP']['model_path'].'/M'.$modelName.'.php';
 			$this -> tpl_codePreview = $genCode;
 			$this -> genModel();
 		}
@@ -113,10 +113,121 @@ EOT;
 			if(!preg_match('/[0-9a-zA-Z]/', $modelName))
 				$this -> tpl_success = -1;
 			else
-				$this -> tpl_success = file_put_contents($GLOBALS['G_SP']['model_path'].'/'.$modelName.'.php', $genCode);
+				$this -> tpl_success = file_put_contents($GLOBALS['G_SP']['model_path'].'/M'.$modelName.'.php', $genCode);
 			$this -> tpl_gen = true;
-			$this -> tpl_codePath = $GLOBALS['G_SP']['model_path'].'/'.$modelName.'.php';
+			$this -> tpl_codePath = $GLOBALS['G_SP']['model_path'].'/M'.$modelName.'.php';
 			$this -> genModel();
+		}
+	}
+	
+	public function genCURD(){
+		$models = scandir($GLOBALS['G_SP']['model_path']);
+		foreach($models as $key => $value){
+			if(strlen(basename($value,'.php')) == strlen($value))
+				unset($models[$key]);
+			else
+				$models[$key] = basename($value,'.php');
+		}
+		$this -> tpl_models = $models;
+		$this ->display('codeBuilder/genCURD.html');
+	}
+	
+	public function genCURDAction(){
+		$actionType = $this->spArgs('genAction', 'preview');
+		$this -> tpl_modelName = $modelName = $this->spArgs('modelName');
+		$this -> tpl_controllerName = $controllerName = $this->spArgs('controllerName');
+		$genCode = <<<EOT
+<?php
+class {$controllerName} extends spController{
+	public function __construct() {
+		parent::__construct();
+		\$this -> _controller = '{$controllerName}';
+		\$this -> _pk = spClass('{$modelName}') -> pk;
+		\$this -> _attributes = spClass('{$modelName}') -> getAttributes();
+	}
+	
+	public function index(){
+		\$this -> tpl_page = \$page = \$this -> spArgs('page',1);
+		\$this -> tpl_datas = spClass('{$modelName}') -> spPager(\$page, 30) -> findAll();
+		\$this -> tpl_pager = spClass('{$modelName}') -> spPager() -> getPager();
+		\$this -> display('{$controllerName}/index.html');
+	}
+	
+	public function view(){
+		\$condition = array();
+		\$condition[\$this->_pk] = \$this -> spArgs('id');
+		\$this -> tpl_data = spClass('{$modelName}') -> find(\$condition);
+		\$this -> display('{$controllerName}/view.html');
+	}
+	
+	public function create(){
+		if(\$_POST){
+			\$rows = spClass('spArgs')->get(\$this->_controller, null, 'post');
+			if((\$id = spClass('{$modelName}')->create(\$rows)))
+				\$this ->success ('新增数据成功',  spUrl (\$this->_controller, 'view', array('id'=>\$id)));
+			else
+				\$this ->error ('新增数据失败', 'javascript:history.go(-1)');
+		}
+		\$this ->display('{$controllerName}/create.html');
+	}
+	
+	public function update(){
+		\$condition = array();
+		\$condition[\$this->_pk] = \$this -> spArgs('id');
+		if(\$_POST){
+			\$rows = spClass('spArgs')->get(\$this->_controller, null, 'post');
+			if(spClass('{$modelName}')->update(\$condition,\$rows))
+				\$this ->success ('编辑数据成功',  spUrl (\$this->_controller, 'view', array('id'=>\$this -> spArgs('id'))));
+			else
+				\$this ->error ('编辑数据失败', 'javascript:history.go(-1)');
+		}
+		\$this -> tpl_data = spClass('{$modelName}') -> find(\$condition);
+		\$this ->display('{$controllerName}/update.html');
+	}
+	
+	public function delete(){
+		\$condition = array();
+		\$condition[\$this->_pk] = \$this -> spArgs('id');
+		\$success = spClass('{$modelName}') -> delete(\$condition);
+		if(\$success)
+			\$this ->success('删除成功', \$this->spArgs('redirect','javascript:history.go(-1)'));
+		else
+			\$this ->error('删除失败', \$this->spArgs('redirect','javascript:history.go(-1)'));
+	}
+}
+EOT;
+		$genTemplate = array();
+		$genTemplate[0] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/index.html');
+		$genTemplate[0]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/index.html');
+		$genTemplate[1] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/create.html');
+		$genTemplate[1]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/create.html');
+		$genTemplate[2] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/update.html');
+		$genTemplate[2]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/update.html');
+		$genTemplate[3] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/view.html');
+		$genTemplate[3]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/view.html');
+		if($actionType == 'preview'){
+			$this -> tpl_preview = true;
+			$this -> tpl_codePath = $GLOBALS['G_SP']['controller_path'].'/'.$controllerName.'.php';
+			$this -> tpl_codePreview = $genCode;
+			$this -> tpl_genTemplatePreview = $genTemplate;
+			$this -> genCURD();
+		}
+		if($actionType == 'gen'){
+			$this -> tpl_gen = true;
+			$this -> tpl_codePath = $GLOBALS['G_SP']['controller_path'].'/'.$controllerName.'.php';
+			if(!preg_match('/[0-9a-zA-Z]/', $controllerName))
+				$this -> tpl_success = -1;
+			else{
+				$this -> tpl_success = file_put_contents($GLOBALS['G_SP']['controller_path'].'/'.$controllerName.'.php', $genCode);
+				foreach($genTemplate as $template){
+					if(!is_file($GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/')){
+						mkdir($GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/');
+					}
+					$successTemplate = file_put_contents($template['path'], $template['contents']);
+					if(empty($successTemplate)) $this->tpl_success_template = -1;
+				}
+			}
+			$this -> genCURD();
 		}
 	}
         

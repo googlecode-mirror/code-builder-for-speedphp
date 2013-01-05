@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>CURD</title>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        </head>
+	<body>
+		<script src="bootstrap/js/jquery.min.js"></script>
+                <script src="bootstrap/js/bootstrap.js"></script>
+		<{include file='layouts/headNav.html'}>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<{include file='layouts/leftNav.html'}>
+					<!--Sidebar content-->
+				</div>
+				<div class="span10">
+					<!--Body content-->
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="<{spUrl c=$_controller a=index}>">数据列表</a></li>
+						<li><a href="<{spUrl c=$_controller a=create}>">新增数据</a></li>
+					</ul>
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<{foreach from=$_attributes item=attribute}>
+								<th><{$attribute}></th>
+								<{/foreach}>
+								<th width="150px">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<{foreach from=$tpl_datas item=data}>
+							<tr>
+								<{foreach from=$_attributes key=key item=attribute}>
+								<td><{$data[$key]}></td>
+								<{/foreach}>
+								<td>
+									<div class="btn-toolbar">
+										<div class="btn-group">
+											<a class="btn" target="_blank" href="<{spUrl c=$_controller a=view id=$data[$_pk]}>"><i class="icon-search"></i></a>
+											<a class="btn" target="_blank" href="<{spUrl c=$_controller a=update id=$data[$_pk]}>"><i class="icon-pencil"></i></a>
+											<a class="btn deleteConfirm" href="<{spUrl c=$_controller a=delete id=$data[$_pk]}>"><i class="icon-remove-sign"></i></a>
+										</div>
+									</div>
+								</td>
+							</tr>
+							<{/foreach}>
+						</tbody>
+					</table>
+					
+					<{if $tpl_pager != ''}>
+					<div class="rows">
+						<div class="span6">
+							<div class="pagination pagination-right">
+								<ul>
+									<li><a href="<{spUrl c=$_controller a=index page=$tpl_pager['prev_page']}>">«</a></li>
+									<{foreach from=$tpl_pager['all_pages'] item=page}>
+									<{if $page > 10}>
+										<{if $tpl_page > $page}>
+										<li class="active"><a href="#<{$tpl_page}>"><{$tpl_page}></a></li>
+										<{/if}>
+										<{if $tpl_page < $tpl_pager['last_page']}>
+										<li><a href="<{spUrl c=$_controller a=index page=$tpl_pager['last_page']}>"><{$tpl_pager['last_page']}></a></li>
+										<{/if}>
+										<{break}>
+									<{/if}>
+									<li <{if $page eq $tpl_page}>class="active"<{/if}>><a href="<{spUrl c=$_controller a=index page=$page}>"><{$page}></a></li>
+									<{/foreach}>
+									<li><a href="<{spUrl c=$_controller a=index page=$tpl_pager['next_page']}>">»</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="span6" style="height:75px; line-height: 68px;">
+							<form method="post" action="<{spUrl c=$_controller a=index}>" class="form-search">
+								<input name="page" type="text" class="input-mini search-query" value="<{$tpl_page}>">
+								<button type="submit" class="btn">Go</button>
+							</form>
+						</div>
+					</div>
+					<{/if}>
+				</div>
+			</div>
+		</div>
+		<script>
+			(function($){
+				$('.deleteConfirm').click(function(){
+					if(confirm('您确认删除该条记录吗？该操作不可逆。'))
+						return true;
+					else
+						return false;
+				})
+			})(jQuery)
+		</script>
+	</body>
+</html>
