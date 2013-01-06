@@ -2,7 +2,7 @@
 /**
  * CodeBuilder is the tool which help developer build CURD code easier and faster
  * @author Pony Cui <PonyCui@me.com>
- * @version 1.0
+ * @version 1.2
  */
 class CodeBuilder extends spController{
         
