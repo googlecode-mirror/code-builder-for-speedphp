@@ -207,7 +207,7 @@ class {$controllerName} extends spController{
 				else \$where[] = ' '.\$key.' LIKE '.spClass('{$modelName}')->escape('%'.\$value.'%').' ';
 			}
 			\$this -> tpl_page = \$page = \$this -> spArgs('page',1);
-			\$this -> tpl_datas = spClass('{$modelName}') -> spPager(\$page, 30) -> findAll(implode('',\$where));
+			\$this -> tpl_datas = spClass('{$modelName}') -> spPager(\$page, 30) -> findAll(implode('AND',\$where));
 			\$this -> tpl_pager = spClass('{$modelName}') -> spPager() -> getPager();
 		}
 		\$this -> display('{$controllerName}/search.html');
