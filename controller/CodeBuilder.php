@@ -54,6 +54,7 @@ EOT;
 			$this -> tpl_preview = true;
 			$this -> tpl_codePath = $GLOBALS['G_SP']['controller_path'].'/'.$controllerName.'.php';
 			$this -> tpl_codePreview = $genCode;
+			$this ->_checkOverwrite($this -> tpl_codePath, $genTemplate);
 			$this -> tpl_genTemplatePreview = $genTemplate;
 			$this -> genController();
 		}
@@ -107,6 +108,7 @@ EOT;
 			$this -> tpl_preview = true;
 			$this -> tpl_codePath = $GLOBALS['G_SP']['model_path'].'/M'.$modelName.'.php';
 			$this -> tpl_codePreview = $genCode;
+			$this ->_checkOverwrite($this -> tpl_codePath);
 			$this -> genModel();
 		}
 		if($actionType == 'gen'){
@@ -229,6 +231,7 @@ EOT;
 			$this -> tpl_preview = true;
 			$this -> tpl_codePath = $GLOBALS['G_SP']['controller_path'].'/'.$controllerName.'.php';
 			$this -> tpl_codePreview = $genCode;
+			$this ->_checkOverwrite($this -> tpl_codePath, $genTemplate);
 			$this -> tpl_genTemplatePreview = $genTemplate;
 			$this -> genCURD();
 		}
@@ -291,6 +294,17 @@ EOT;
 			$str .= '\''.$col['Field'].'\''.'=>'.'\''.$col['Field'].'\','."\n\t\t\t";
 		}
 		return $str;
+	}
+	
+	private function _checkOverwrite($codeFilePath, &$tempFiles = array()){
+		if(is_file($codeFilePath)){
+			$this -> tpl_codeFile_overwrite = true;
+		}
+		foreach($tempFiles as $key => $item){
+			if(is_file($item['path'])){
+				$tempFiles[$key]['overwrite'] = true;
+			}
+		}
 	}
 }
 ?>

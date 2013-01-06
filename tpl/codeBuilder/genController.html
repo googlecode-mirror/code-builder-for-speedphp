@@ -66,6 +66,9 @@
 					<{if $tpl_preview == true}>
 					<div class="row">
 						<div class="span12">
+							<{if $tpl_codeFile_overwrite == true}>
+							<div class="alert"><strong>警告!</strong> 新生成的文件将覆盖已经存在的Controller文件。</div>
+							<{/if}>
 							<p class="text-success">将在以下位置生成代码：<{$tpl_codePath}></p>
 						</div>
 					</div>
@@ -80,6 +83,9 @@
 					<{foreach from=$tpl_genTemplatePreview item=template}>
 					<div class="row">
 						<div class="span12">
+							<{if $template['overwrite'] == true}>
+							<div class="alert"><strong>警告!</strong> 新生成的文件将覆盖已经存在的模板文件。</div>
+							<{/if}>
 							<p class="text-success">将在以下位置生成模板：<{$template['path']}></p>
 						</div>
 					</div>

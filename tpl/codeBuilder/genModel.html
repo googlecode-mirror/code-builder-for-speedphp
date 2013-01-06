@@ -85,6 +85,9 @@
 					<{if $tpl_preview == true}>
 					<div class="row">
 						<div class="span12">
+							<{if $tpl_codeFile_overwrite == true}>
+							<div class="alert"><strong>警告!</strong> 新生成的文件将覆盖已经存在的Model文件。</div>
+							<{/if}>
 							<p class="text-success">将在以下位置生成代码：<{$tpl_codePath}></p>
 						</div>
 					</div>
