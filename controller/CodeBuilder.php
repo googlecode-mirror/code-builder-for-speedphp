@@ -102,6 +102,11 @@ class M{$modelName} extends spModel{
 		return array(
 			{$this->_getAttributes($tableColInfo)});
 	}
+	
+	public function getAttributeFormsets(){
+		return array(
+		);
+	}
 }
 EOT;
 		if($actionType == 'preview'){
@@ -146,6 +151,8 @@ class {$controllerName} extends spController{
 		\$this -> _controller = '{$controllerName}';
 		\$this -> _pk = spClass('{$modelName}') -> pk;
 		\$this -> _attributes = spClass('{$modelName}') -> getAttributes();
+		//\$this -> _attributeFormset = spClass('{$modelName}') -> getAttributeFormsets();
+		//spAddViewFunction('cbForm',array('LibCodeBuilder','cbFormWidget'));
 	}
 	
 	public function index(){

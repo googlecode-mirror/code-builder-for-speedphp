@@ -9,4 +9,9 @@ class MOnlinedown extends spModel{
 			'name'=>'name',
 			);
 	}
+	
+	public function getAttributeFormsets(){
+		return array(
+		);
+	}
 }

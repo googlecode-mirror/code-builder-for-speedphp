@@ -27,7 +27,11 @@
 							<legend>新增记录数据</legend>
 							<{foreach from=$_attributes key=key item=attribute}>
 							<label><{$attribute}></label>
-							<input name="<{$_controller}>[<{$key}>]" type="text" placeholder="请输入<{$attribute}>">
+								<{if $_attributeFormset&& $_attributeFormset[$key]}>
+								<{cbForm moreParams=$_attributeFormset[$key] name="`$_controller`[`$key`]"}>
+								<{else}>
+								<input name="<{$_controller}>[<{$key}>]" type="text" placeholder="请输入<{$attribute}>">
+								<{/if}>
 							<{/foreach}>
 							<label></label>
 							<button type="submit" class="btn btn-primary">提交新增</button>

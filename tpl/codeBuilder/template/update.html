@@ -28,7 +28,11 @@
 							<legend>编辑记录数据</legend>
 							<{foreach from=$_attributes key=key item=attribute}>
 							<label><{$attribute}></label>
-							<input name="<{$_controller}>[<{$key}>]" type="text" placeholder="请输入<{$attribute}>" value="<{$tpl_data[$key]}>">
+								<{if $_attributeFormset&& $_attributeFormset[$key]}>
+								<{cbForm moreParams=$_attributeFormset[$key] name="`$_controller`[`$key`]" value=$tpl_data[$key]}>
+								<{else}>
+								<input name="<{$_controller}>[<{$key}>]" type="text" placeholder="请输入<{$attribute}>" value="<{$tpl_data[$key]}>">
+								<{/if}>
 							<{/foreach}>
 							<label></label>
 							<button type="submit" class="btn btn-primary">提交更改</button>
