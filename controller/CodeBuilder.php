@@ -194,6 +194,24 @@ class {$controllerName} extends spController{
 		else
 			\$this ->error('删除失败', \$this->spArgs('redirect','javascript:history.go(-1)'));
 	}
+	
+	public function search(){
+		if(\$_POST){
+			\$this -> tpl_keyword = \$conditions = spClass('spArgs')->get(\$this->_controller, null, 'post');
+			\$this -> tpl_searchType = \$searchType = spClass('spArgs')->get(\$this->_controller.'_searchType', null, 'post');
+			\$where = array();
+			foreach(\$conditions as \$key => \$value){
+				if(empty(\$value)) continue;
+				if(empty(\$this->_attributes[\$key])) continue;
+				if(\$searchType[\$key] == 1) \$where[] = ' '.\$key.' LIKE '.spClass('{$modelName}')->escape(\$value).' ';
+				else \$where[] = ' '.\$key.' LIKE '.spClass('{$modelName}')->escape('%'.\$value.'%').' ';
+			}
+			\$this -> tpl_page = \$page = \$this -> spArgs('page',1);
+			\$this -> tpl_datas = spClass('{$modelName}') -> spPager(\$page, 30) -> findAll(implode('',\$where));
+			\$this -> tpl_pager = spClass('{$modelName}') -> spPager() -> getPager();
+		}
+		\$this -> display('{$controllerName}/search.html');
+	}
 }
 EOT;
 		$genTemplate = array();
@@ -205,6 +223,8 @@ EOT;
 		$genTemplate[2]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/update.html');
 		$genTemplate[3] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/view.html');
 		$genTemplate[3]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/view.html');
+		$genTemplate[3] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/search.html');
+		$genTemplate[3]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/search.html');
 		if($actionType == 'preview'){
 			$this -> tpl_preview = true;
 			$this -> tpl_codePath = $GLOBALS['G_SP']['controller_path'].'/'.$controllerName.'.php';
