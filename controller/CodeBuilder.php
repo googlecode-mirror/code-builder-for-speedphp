@@ -225,8 +225,8 @@ EOT;
 		$genTemplate[2]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/update.html');
 		$genTemplate[3] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/view.html');
 		$genTemplate[3]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/view.html');
-		$genTemplate[3] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/search.html');
-		$genTemplate[3]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/search.html');
+		$genTemplate[4] = array('path'=>$GLOBALS['G_SP']['view']['config']['template_dir'].'/'.$controllerName.'/search.html');
+		$genTemplate[4]['contents'] = file_get_contents($GLOBALS['G_SP']['view']['config']['template_dir'].'/codeBuilder/template/search.html');
 		if($actionType == 'preview'){
 			$this -> tpl_preview = true;
 			$this -> tpl_codePath = $GLOBALS['G_SP']['controller_path'].'/'.$controllerName.'.php';
