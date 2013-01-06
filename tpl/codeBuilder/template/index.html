@@ -35,7 +35,13 @@
 							<{foreach from=$tpl_datas item=data}>
 							<tr>
 								<{foreach from=$_attributes key=key item=attribute}>
-								<td><{$data[$key]}></td>
+								<td>
+									<{if $_attributeFormset&& $_attributeFormset[$key] && ($_attributeFormset[$key]['type']|strtolower == 'dropdownlist' || $_attributeFormset[$key]['type']|strtolower == 'radio')}>
+									<{$_attributeFormset[$key]['options'][$data[$key]]}>
+									<{else}>
+									<{$data[$key]}>
+									<{/if}>
+								</td>
 								<{/foreach}>
 								<td>
 									<div class="btn-toolbar">

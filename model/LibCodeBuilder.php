@@ -11,7 +11,7 @@ class LibCodeBuilder {
 		extract($moreParams);
 		switch(strtolower($type)){
 			case 'dropdownlist':
-				return $this ->_cbFormDropDownList($name, $options, $value);
+				return $this ->_cbFormDropDownList($name, $options, $value, $htmlOptions);
 			case 'textfield':
 				return $this ->_cbFormTextField($name, $value, $htmlOptions);
 			case 'password':
@@ -22,13 +22,19 @@ class LibCodeBuilder {
 				return $this ->_cbFormCheckBox($name, $checkBoxText, $checkBoxValue, $value, $htmlOptions);
 			case 'radio':
 				return $this ->_cbFormRadio($name, $value, $options);
+			case 'file':
+				return $this ->_cbFormFile($name, $htmlOptions);
 			case 'default':
 				return $this ->_cbFormTextField($name, $value, $htmlOptions);
 		}
 	}
 	
-	private function _cbFormDropDownList($name, $options = array(), $value = 0){
-		$html = '<select name="'.$name.'">';
+	private function _cbFormDropDownList($name, $options = array(), $value = 0 ,$htmlOptions = array()){
+		$html = '<select name="'.$name.'" ';
+		foreach($htmlOptions as $htmlKey=>$htmlValue){
+			$html .= $htmlKey.'="'.$htmlValue.'" ';
+		}
+		$html.= '>';
 		foreach($options as $optionValue => $optionText){
 			if($value == $optionValue)
 				$html .= '<option value="'.$optionValue.'" selected>'.$optionText.'</option>';
@@ -85,6 +91,15 @@ class LibCodeBuilder {
 			else
 				$html .= '<label class="radio inline"><input type="radio" name="'.$name.'" value="'.$optionValue.'">'.$optionText.'</label>';
 		}
+		return $html;
+	}
+	
+	private function _cbFormFile($name, $htmlOptions = array()){
+		$html = '<input type="file" name="'.$name.'" ';
+		foreach($htmlOptions as $htmlKey=>$htmlValue){
+			$html .= $htmlKey.'="'.$htmlValue.'" ';
+		}
+		$html.= ' />';
 		return $html;
 	}
 }

@@ -28,7 +28,11 @@
 							<legend>搜索数据</legend>
 							<{foreach from=$_attributes key=key item=attribute}>
 							<label><{$attribute}></label>
+							<{if $_attributeFormset&& $_attributeFormset[$key] && $_attributeFormset[$key]['type'] != 'file'}>
+							<{cbForm moreParams=$_attributeFormset[$key] name="`$_controller`[`$key`]"}>
+							<{else}>
 							<input name="<{$_controller}>[<{$key}>]" type="text" placeholder="搜索<{$attribute}>" value="<{$tpl_data[$key]}>">
+							<{/if}>
 							<select name="<{$_controller}>_searchType[<{$key}>]" style="width:100px">
 								<option value="0">模糊搜索</option>
 								<option value="1">精确搜索</option>

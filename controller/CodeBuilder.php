@@ -105,6 +105,13 @@ class M{$modelName} extends spModel{
 	
 	public function getAttributeFormsets(){
 		return array(
+			//'columnName'=>array('type'=>'dropDownList', 'options'=>array('false'=>'选项一','true'=>'选择二'), 'htmlOptions'=>array()),
+			//'columnName'=>array('type'=>'textField', 'htmlOptions'=>array('readonly'=>'true')),
+			//'columnName'=>array('type'=>'password', 'htmlOptions'=>array()),
+			//'columnName'=>array('type'=>'textArea', 'htmlOptions'=>array('rows'=>'6')),
+			//'columnName'=>array('type'=>'checkBox', 'checkBoxText'=>'钓鱼岛是中国的吗？', 'checkBoxValue'=>'yes', 'htmlOptions'=>array()),
+			//'columnName'=>array('type'=>'radio', 'options'=>array('A'=>'钓鱼岛是中国的','B'=>'苍老师是世界的')),
+			//'columnName'=>array('type'=>'file', 'htmlOptions'=>array()),
 		);
 	}
 }
@@ -151,8 +158,8 @@ class {$controllerName} extends spController{
 		\$this -> _controller = '{$controllerName}';
 		\$this -> _pk = spClass('{$modelName}') -> pk;
 		\$this -> _attributes = spClass('{$modelName}') -> getAttributes();
-		//\$this -> _attributeFormset = spClass('{$modelName}') -> getAttributeFormsets();
-		//spAddViewFunction('cbForm',array('LibCodeBuilder','cbFormWidget'));
+		\$this -> _attributeFormset = spClass('{$modelName}') -> getAttributeFormsets();
+		spAddViewFunction('cbForm',array('LibCodeBuilder','cbFormWidget'));
 	}
 	
 	public function index(){
