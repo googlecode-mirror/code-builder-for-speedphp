@@ -22,6 +22,7 @@
 						<li><a href="<{spUrl c=$_controller a=create}>">新增数据</a></li>
 						<li><a href="<{spUrl c=$_controller a=search}>">搜索数据</a></li>
 					</ul>
+					<{if !empty($tpl_datas)}>
 					<table class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
@@ -36,7 +37,7 @@
 							<tr>
 								<{foreach from=$_attributes key=key item=attribute}>
 								<td>
-									<{if $_attributeFormset&& $_attributeFormset[$key] && ($_attributeFormset[$key]['type']|strtolower == 'dropdownlist' || $_attributeFormset[$key]['type']|strtolower == 'radio')}>
+									<{if isset($_attributeFormset) && isset($_attributeFormset[$key]) && ($_attributeFormset[$key]['type']|strtolower == 'dropdownlist' || $_attributeFormset[$key]['type']|strtolower == 'radio')}>
 									<{$_attributeFormset[$key]['options'][$data[$key]]}>
 									<{else}>
 									<{$data[$key]}>
@@ -57,7 +58,7 @@
 						</tbody>
 					</table>
 					
-					<{if $tpl_pager != ''}>
+					<{if !empty($tpl_pager)}>
 					<div class="rows">
 						<div class="span6">
 							<div class="pagination pagination-right">
@@ -87,6 +88,8 @@
 						</div>
 					</div>
 					<{/if}>
+					
+					<{/if}><!-- end if of $tpl_datas -->
 				</div>
 			</div>
 		</div>

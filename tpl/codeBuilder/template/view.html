@@ -23,7 +23,7 @@
 						<li><a href="<{spUrl c=$_controller a=search}>">搜索数据</a></li>
 						<li class="active"><a href="#">查看数据详细</a></li>
 					</ul>
-					<{if $tpl_data == ''}>
+					<{if empty($tpl_data)}>
 					<p class="text-error">你要查看的数据不存在。</p>
 					<{else}>
 					<table class="table table-striped table-bordered table-hover">
@@ -38,7 +38,7 @@
 							<tr>
 								<td><{$attribute}></td>
 								<td>
-									<{if $_attributeFormset&& $_attributeFormset[$key] && ($_attributeFormset[$key]['type']|strtolower == 'dropdownlist' || $_attributeFormset[$key]['type']|strtolower == 'radio')}>
+									<{if isset($_attributeFormset) && isset($_attributeFormset[$key])  && ($_attributeFormset[$key]['type']|strtolower == 'dropdownlist' || $_attributeFormset[$key]['type']|strtolower == 'radio')}>
 									<{$_attributeFormset[$key]['options'][$tpl_data[$key]]}>
 									<{else}>
 									<{$tpl_data[$key]}>

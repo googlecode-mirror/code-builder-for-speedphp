@@ -11,20 +11,38 @@ class LibCodeBuilder {
 		extract($moreParams);
 		switch(strtolower($type)){
 			case 'dropdownlist':
+				if(empty($options)) $options = array();
+				if(empty($value)) $value = 0;
+				if(empty($htmlOptions)) $htmlOptions = array();
 				return $this ->_cbFormDropDownList($name, $options, $value, $htmlOptions);
 			case 'textfield':
+				if(empty($value)) $value = '';
+				if(empty($htmlOptions)) $htmlOptions = array();
 				return $this ->_cbFormTextField($name, $value, $htmlOptions);
 			case 'password':
+				if(empty($value)) $value = '';
+				if(empty($htmlOptions)) $htmlOptions = array();
 				return $this ->_cbFormPassword($name, $value, $htmlOptions);
 			case 'textarea':
+				if(empty($value)) $value = '';
+				if(empty($htmlOptions)) $htmlOptions = array();
 				return $this ->_cbFormTextArea($name, $value, $htmlOptions);
 			case 'checkbox':
+				if(empty($checkBoxText)) $checkBoxText = '';
+				if(empty($checkBoxValue)) $checkBoxValue = 'on';
+				if(empty($value)) $value = '';
+				if(empty($htmlOptions)) $htmlOptions = array();
 				return $this ->_cbFormCheckBox($name, $checkBoxText, $checkBoxValue, $value, $htmlOptions);
 			case 'radio':
+				if(empty($value)) $value = '';
+				if(empty($options)) $options = array();
 				return $this ->_cbFormRadio($name, $value, $options);
 			case 'file':
+				if(empty($htmlOptions)) $htmlOptions = array();
 				return $this ->_cbFormFile($name, $htmlOptions);
 			case 'default':
+				if(empty($value)) $value = '';
+				if(empty($htmlOptions)) $htmlOptions = array();
 				return $this ->_cbFormTextField($name, $value, $htmlOptions);
 		}
 	}
